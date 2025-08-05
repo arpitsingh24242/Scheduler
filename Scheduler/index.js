@@ -19,7 +19,7 @@ const messageQueue = new Queue("messageQueue", {
   redis: { host: "127.0.0.1", port: 6379 },
 });
 
-// JWT Middleware (kept in case you want auth for login-related routes)
+
 function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: "Missing token" });
@@ -34,7 +34,7 @@ function authenticate(req, res, next) {
   }
 }
 
-// Login endpoint
+
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: "Missing credentials" });
@@ -49,7 +49,7 @@ app.post("/login", async (req, res) => {
   res.json({ token });
 });
 
-// Create Event (with manually entered email)
+
 app.post("/events", async (req, res) => {
   const { message, send_at, email } = req.body;
   if (!message || !send_at || !email) {
@@ -84,7 +84,7 @@ app.post("/events", async (req, res) => {
 app.get("/events", async (req, res) => {
   try {
     const events = await prisma.event.findMany({
-      orderBy: { send_at: "desc" },
+      orderBy: { send_at: "asc" },
     });
     res.json(events);
   } catch (error) {
